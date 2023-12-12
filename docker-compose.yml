@@ -28,6 +28,7 @@ services:
      - "7935:7935"
      - "7939:7939"
      - "7833:7833"
+     - "8800:8800"
     environment:
       - "CASSANDRA_SEEDS=cassandra"
       - "PROMETHEUS_ENDPOINT_0=0.0.0.0:8000"
@@ -35,6 +36,8 @@ services:
       - "PROMETHEUS_ENDPOINT_2=0.0.0.0:8002"
       - "PROMETHEUS_ENDPOINT_3=0.0.0.0:8003"
       - "DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml"
+      - "FRONTEND_HTTP_PORT=8800"
+      - "FRONTEND_HTTP_PROCEDURES=uber.cadence.api.v1.WorkflowAPI::StartWorkflowExecution,uber.cadence.api.v1.WorkflowAPI::GetWorkflowExecutionHistory,uber.cadence.api.v1.WorkflowAPI::TerminateWorkflowExecution,uber.cadence.api.v1.WorkflowAPI::RestartWorkflowExecution,uber.cadence.api.v1.WorkflowAPI::DescribeWorkflowExecution,uber.cadence.api.v1.WorkflowAPI::SignalWorkflowExecution,uber.cadence.api.v1.WorkflowAPI::SignalWithStartWorkflowExecution"
     depends_on:
       - cassandra
       - prometheus
