@@ -1,11 +1,14 @@
 package worker
 
 import (
+	"github.com/uber-common/cadence-samples/credflow/workflows"
 	"github.com/uber-go/tally"
 	apiv1 "github.com/uber/cadence-idl/go/proto/api/v1"
 	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
+	"go.uber.org/cadence/activity"
 	"go.uber.org/cadence/compatibility"
 	"go.uber.org/cadence/worker"
+	"go.uber.org/cadence/workflow"
 	"go.uber.org/yarpc"
 	"go.uber.org/yarpc/transport/grpc"
 	"go.uber.org/zap"
@@ -35,6 +38,12 @@ func StartWorker() {
 		Domain,
 		TaskListName,
 		workerOptions)
+	// onboarding workflow registration
+	w.RegisterWorkflowWithOptions(workflows.OnboardingWorkflow, workflow.RegisterOptions{Name: "cadence_samples.OnboardingWorkflow"})
+	w.RegisterActivityWithOptions(workflows.Directors_Details, activity.RegisterOptions{Name: "cadence_samples.Directors_Details"})
+	w.RegisterActivityWithOptions(workflows.Organisation_Details, activity.RegisterOptions{Name: "cadence_samples.Organisation_Details"})
+	w.RegisterActivityWithOptions(workflows.Warehouse_Details, activity.RegisterOptions{Name: "cadence_samples.Warehouse_Details"})
+	w.RegisterActivityWithOptions(workflows.Bank_Details, activity.RegisterOptions{Name: "cadence_samples.Bank_Details"})
 
 	err := w.Start()
 	if err != nil {
